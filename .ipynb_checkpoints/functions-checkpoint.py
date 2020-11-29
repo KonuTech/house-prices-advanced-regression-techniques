@@ -1,3 +1,6 @@
+# https://scikit-learn.org/stable/auto_examples/impute/plot_missing_values.html#impute-the-missing-data-and-score
+# https://scikit-learn.org/stable/modules/impute.html
+
 from sklearn.datasets import load_boston, load_iris, load_diabetes, load_digits
 
 import os
@@ -11,8 +14,9 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from scipy import stats
 from scipy.stats import norm
+import warnings
 
-
+warnings.filterwarnings('ignore')
 sns.set()
 pd.options.display.max_columns = None
 
