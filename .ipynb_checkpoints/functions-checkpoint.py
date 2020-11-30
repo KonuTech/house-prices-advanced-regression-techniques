@@ -133,3 +133,10 @@ def get_list_of_files_by_extension(directory, extension):
             list_of_files.append(item)
 
     return list_of_files
+
+def count_unique_values(dataframe, column):
+    count_unique = dataframe[str(column)].value_counts()
+    count_null = pd.Series(dataframe[str(column)].isnull().sum(),index=["nan"])
+    count_unique = count_unique.append(count_null, ignore_index=False,)
+    
+    return count_unique
