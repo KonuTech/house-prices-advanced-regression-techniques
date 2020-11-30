@@ -143,32 +143,47 @@ def count_unique_values(dataframe, column):
     
     return count_unique
 
-def choose_imputer_and_visualise(dataframe, columns, target, imputer=None):
+def choose_imputer_and_visualise_for_numeric(dataframe, columns, target, imputer=None, strategy=None, weights=None):
     """ 
     :SimpleImputer:
     :IterativeImputer:
     :KNNImputer:
+    
+    :SimpleImputer strategy:
+    "mean"
+    "median"
+    "most_frequent"
+    "constant"
+    
+    :KNNImputer weights:
+    "uniform"
+    "distance"
+    "callable" 
     """
+    
+    print("$ Counts before Imputation:")
+    for column in columns:
+        print(count_unique_values(dataframe, column))
+        print()
+    
     if imputer == None:
-        output = dataframe.fillna(0)
+        output = pd.DataFrame(dataframe.fillna(0))
         
-    elif imputer == SimpleImputer:
-        SI = SimpleImputer(missing_values=np.nan, strategy='most_frequent')
+    elif imputer == SimpleImputer and strategy != None:
+        SI = SimpleImputer(missing_values=np.nan, strategy=str(strategy))
         SI.fit(dataframe[columns])
-        output = SI.transform(dataframe[columns])
+        output = pd.DataFrame(SI.transform(dataframe[columns]))
         
     elif imputer ==  IterativeImputer:
         II = IterativeImputer(max_iter=10, random_state=0)
         II.fit(dataframe[columns])
-        output = II.transform(dataframe[columns])
+        output = pd.DataFrame(II.transform(dataframe[columns]))
         
-    elif imputer == KNNImputer:
-        KNNI = KNNImputer(missing_values=np.nan, weights="distance", add_indicator=False)
+    elif imputer == KNNImputer and weights != None:
+        KNNI = KNNImputer(missing_values=np.nan, weights=str(weights), add_indicator=False)
         output = pd.DataFrame(KNNI.fit_transform(dataframe[columns]))
     else:
         output = "error"
-        
-    #print(output.isnull().sum())
     
     for column in range(len(columns)):
         sns.distplot(output[column], fit=norm);
@@ -180,5 +195,67 @@ def choose_imputer_and_visualise(dataframe, columns, target, imputer=None):
         target_column = pd.DataFrame(dataframe.iloc[:,-1])
         test_output = pd.merge(target_column, output, left_index=True, right_index=True)
         sns.jointplot(x=column, y=target, data=test_output, kind='reg', marker="+", color="b")
+        
+    print("$ Counts after Imputation:")
+    for column in range(len(output.columns)):
+        count_unique = output[column].value_counts()
+        print(count_unique)
+        print()
+        
+    return output
+
+def choose_imputer_and_visualise_for_category(dataframe, columns, target, imputer=None, strategy=None, weights=None):
+    """ 
+    :SimpleImputer:
+    :IterativeImputer:
+    :KNNImputer:
+    
+    :SimpleImputer strategy:
+    "mean"
+    "median"
+    "most_frequent"
+    "constant"
+    
+    :KNNImputer weights:
+    "uniform"
+    "distance"
+    "callable" 
+    """
+    
+    print("$ Counts before Imputation:")
+    for column in columns:
+        print(count_unique_values(dataframe, column))
+        print()
+    
+    if imputer == None:
+        output = pd.DataFrame(dataframe.fillna(0))
+        
+    elif imputer == SimpleImputer and strategy != None:
+        SI = SimpleImputer(missing_values=np.nan, strategy=str(strategy))
+        SI.fit(dataframe[columns])
+        output = pd.DataFrame(SI.transform(dataframe[columns]))
+        
+    elif imputer ==  IterativeImputer:
+        II = IterativeImputer(max_iter=10, random_state=0)
+        II.fit(dataframe[columns])
+        output = pd.DataFrame(II.transform(dataframe[columns]))
+        
+    elif imputer == KNNImputer and weights != None:
+        KNNI = KNNImputer(missing_values=np.nan, weights=str(weights), add_indicator=False)
+        output = pd.DataFrame(KNNI.fit_transform(dataframe[columns]))
+    else:
+        output = "error"
+    
+    print(output.dtypes)
+    
+    for column in range(len(columns)):
+        sns.countplot(output[column], palette="Paired");
+        fig = plt.figure()
+    
+    print("$ Counts after Imputation:")
+    for column in range(len(output.columns)):
+        count_unique = output[column].value_counts()
+        print(count_unique)
+        print()
         
     return output
