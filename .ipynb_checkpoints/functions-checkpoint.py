@@ -144,7 +144,11 @@ def count_unique_values(dataframe, column):
     return count_unique
 
 def choose_imputer_and_visualise(dataframe, columns, target, imputer=None):
-    """ """
+    """ 
+    :SimpleImputer:
+    :IterativeImputer:
+    :KNNImputer:
+    """
     if imputer == None:
         output = dataframe.fillna(0)
         
