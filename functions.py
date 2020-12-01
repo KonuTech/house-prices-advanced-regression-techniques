@@ -1,3 +1,5 @@
+# https://www.kaggle.com/c/house-prices-advanced-regression-techniques/data
+
 # https://scikit-learn.org/stable/auto_examples/impute/plot_missing_values.html#impute-the-missing-data-and-score
 # https://scikit-learn.org/stable/modules/impute.html
 
@@ -143,7 +145,7 @@ def count_unique_values(dataframe, column):
     
     return count_unique
 
-def choose_imputer_and_visualise_for_numeric(dataframe, columns, target, imputer=None, strategy=None, weights=None):
+def choose_imputer_and_visualise_for_numeric(dataframe, variables, target, imputer=None, strategy=None, weights=None):
     """ 
     :SimpleImputer:
     :IterativeImputer:
@@ -161,49 +163,57 @@ def choose_imputer_and_visualise_for_numeric(dataframe, columns, target, imputer
     "callable" 
     """
     
-    print("$ Counts before Imputation:")
-    for column in columns:
-        print(count_unique_values(dataframe, column))
-        print()
+    #print("$ Counts before Imputation:")
+    #for column in variables:
+    #    print(count_unique_values(dataframe, column))
+    #    print()
     
     if imputer == None:
-        output = pd.DataFrame(dataframe.fillna(0))
+        output = pd.DataFrame(dataframe.fillna(0), columns=variables)
         
     elif imputer == SimpleImputer and strategy != None:
         SI = SimpleImputer(missing_values=np.nan, strategy=str(strategy))
-        SI.fit(dataframe[columns])
-        output = pd.DataFrame(SI.transform(dataframe[columns]))
+        SI.fit(dataframe[variables])
+        output = pd.DataFrame(SI.transform(dataframe[variables]), columns=variables)
         
     elif imputer ==  IterativeImputer:
         II = IterativeImputer(max_iter=10, random_state=0)
-        II.fit(dataframe[columns])
-        output = pd.DataFrame(II.transform(dataframe[columns]))
+        II.fit(dataframe[variables])
+        output = pd.DataFrame(II.transform(dataframe[variables]), columns=variables)
         
     elif imputer == KNNImputer and weights != None:
         KNNI = KNNImputer(missing_values=np.nan, weights=str(weights), add_indicator=False)
-        output = pd.DataFrame(KNNI.fit_transform(dataframe[columns]))
+        output = pd.DataFrame(KNNI.fit_transform(dataframe[variables]), columns=variables)
+        
     else:
         output = "error"
     
-    for column in range(len(columns)):
-        sns.distplot(output[column], fit=norm);
+    #print("$ Counts after Imputation:")
+    #for column in output.columns:
+    #    count_unique = output[column].value_counts()
+    #    print(column)
+    #    print(count_unique)
+    #    print()
+        
+    
+    for column in variables:
+        ax = sns.distplot(output[column], fit=norm)
+        ax.set_title("Histogram of " + str(column))
+        ax.set_xlabel(str(column))
+        ax.set_ylabel("Frequency Rate")
         fig = plt.figure()
+        
         res = stats.probplot(output[column], plot=plt)
         fig = plt.figure()
-    
-    for column in range(len(columns)):
+        
         target_column = pd.DataFrame(dataframe.iloc[:,-1])
         test_output = pd.merge(target_column, output, left_index=True, right_index=True)
-        sns.jointplot(x=column, y=target, data=test_output, kind='reg', marker="+", color="b")
-        
-    print("$ Counts after Imputation:")
-    for column in range(len(output.columns)):
-        count_unique = output[column].value_counts()
-        print(count_unique)
-        print()
-        
-    return output
+        ax = sns.jointplot(x=column, y=target, data=test_output, kind='reg', marker="+", color="b")
+        ax.fig.suptitle("Scatter plot of " + str(column) + "vs. " + target)
+        plt.figure()
 
+
+    return output
 def choose_imputer_and_visualise_for_category(dataframe, columns, target, imputer=None, strategy=None, weights=None):
     """ 
     :SimpleImputer:
@@ -249,7 +259,7 @@ def choose_imputer_and_visualise_for_category(dataframe, columns, target, impute
     print(output.dtypes)
     
     for column in range(len(columns)):
-        sns.countplot(output[column], palette="Paired");
+        sns.countplot(output[column], palette="Paired")
         fig = plt.figure()
     
     print("$ Counts after Imputation:")
