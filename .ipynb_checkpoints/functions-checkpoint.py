@@ -214,7 +214,8 @@ def choose_imputer_and_visualise_for_numeric(dataframe, variables, target, imput
 
 
     return output
-def choose_imputer_and_visualise_for_category(dataframe, columns, target, imputer=None, strategy=None, weights=None):
+
+def choose_imputer_and_visualise_for_category(dataframe, variables, target, imputer=None, strategy=None, weights=None):
     """ 
     :SimpleImputer:
     :IterativeImputer:
@@ -232,40 +233,41 @@ def choose_imputer_and_visualise_for_category(dataframe, columns, target, impute
     "callable" 
     """
     
-    print("$ Counts before Imputation:")
-    for column in columns:
-        print(count_unique_values(dataframe, column))
-        print()
+    #print("$ Counts before Imputation:")
+    #for column in variables:
+    #    print(count_unique_values(dataframe, column))
+    #    print()
     
     if imputer == None:
-        output = pd.DataFrame(dataframe.fillna(0))
+        output = pd.DataFrame(dataframe.fillna(0), columns=variables)
         
     elif imputer == SimpleImputer and strategy != None:
         SI = SimpleImputer(missing_values=np.nan, strategy=str(strategy))
-        SI.fit(dataframe[columns])
-        output = pd.DataFrame(SI.transform(dataframe[columns]))
+        SI.fit(dataframe[variables])
+        output = pd.DataFrame(SI.transform(dataframe[variables]), columns=variables)
         
     elif imputer ==  IterativeImputer:
         II = IterativeImputer(max_iter=10, random_state=0)
-        II.fit(dataframe[columns])
-        output = pd.DataFrame(II.transform(dataframe[columns]))
+        II.fit(dataframe[variables])
+        output = pd.DataFrame(II.transform(dataframe[variables]), columns=variables)
         
     elif imputer == KNNImputer and weights != None:
         KNNI = KNNImputer(missing_values=np.nan, weights=str(weights), add_indicator=False)
-        output = pd.DataFrame(KNNI.fit_transform(dataframe[columns]))
+        output = pd.DataFrame(KNNI.fit_transform(dataframe[variables]), columns=variables)
+        
     else:
         output = "error"
-    
-    print(output.dtypes)
-    
-    for column in range(len(columns)):
-        sns.countplot(output[column], palette="Paired")
-        fig = plt.figure()
-    
-    print("$ Counts after Imputation:")
-    for column in range(len(output.columns)):
-        count_unique = output[column].value_counts()
-        print(count_unique)
-        print()
         
+    #print("$ Counts after Imputation:")
+    #for column in range(len(output.columns)):
+    #    count_unique = output[column].value_counts()
+    #    print(count_unique)
+    #    print()
+        
+    for column in variables:
+        ax = sns.countplot(output[column], palette="Paired")
+        ax.set_title("Bar plot of " + str(column))
+        ax.set_xlabel(str(column))
+        fig = plt.figure()
+            
     return output
