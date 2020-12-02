@@ -26,8 +26,10 @@ pd.options.display.max_columns = None
 
 def get_dataset(dictionary):
     
-    """ https://scikit-learn.org/0.16/datasets/index.html """
-    """ https://scikit-learn.org/stable/datasets/index.html """
+    """
+    https://scikit-learn.org/0.16/datasets/index.html
+    https://scikit-learn.org/stable/datasets/index.html
+    """
 
     for values in dictionary.values():
         #key = pd.DataFrame.from_dict(dictionary.values)
@@ -139,13 +141,33 @@ def get_list_of_files_by_extension(directory, extension):
     return list_of_files
 
 def count_unique_values(dataframe, column):
+    """ """
     count_unique = dataframe[str(column)].value_counts()
     count_null = pd.Series(dataframe[str(column)].isnull().sum(),index=["nan"])
-    count_unique = count_unique.append(count_null, ignore_index=False,)
+    count_unique = count_unique.append(count_null, ignore_index=False)
     
     return count_unique
 
-def choose_imputer_and_visualise_for_numeric(dataframe, variables, target, imputer=None, strategy=None, weights=None):
+def visualise_floats(dataframe, variables, target):
+    """
+    """
+    for column in variables:
+        ax = sns.distplot(dataframe[column].dropna(), fit=norm)
+        ax.set_title("Histogram of " + str(column))
+        ax.set_xlabel(str(column))
+        ax.set_ylabel("Frequency Rate")
+        fig = plt.figure()
+        
+        res = stats.probplot(dataframe[column], plot=plt)
+        fig = plt.figure()
+        
+        target_column = pd.DataFrame(dataframe.iloc[:,-1])
+        test_output = pd.merge(target_column, dataframe[variables], left_index=True, right_index=True)
+        ax = sns.jointplot(x=column, y=target, data=test_output, kind='reg', marker="+", color="b")
+        ax.fig.suptitle("Scatter plot of " + str(column) + "vs. " + target)
+        plt.figure()
+
+def choose_imputer_and_visualise_floats(dataframe, variables, target, imputer=None, strategy=None, weights=None):
     """ 
     :SimpleImputer:
     :IterativeImputer:
@@ -215,7 +237,7 @@ def choose_imputer_and_visualise_for_numeric(dataframe, variables, target, imput
 
     return output
 
-def choose_imputer_and_visualise_for_category(dataframe, variables, target, imputer=None, strategy=None, weights=None):
+def choose_imputer_and_visualise_categories(dataframe, variables, target, imputer=None, strategy=None, weights=None):
     """ 
     :SimpleImputer:
     :IterativeImputer:
