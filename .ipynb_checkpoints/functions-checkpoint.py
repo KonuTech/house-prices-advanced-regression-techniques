@@ -232,11 +232,13 @@ def choose_imputer_and_visualise_floats(dataframe, variables, target, imputer=No
         res = stats.probplot(output[column], plot=plt)
         fig = plt.figure()
         
-        target_column = pd.DataFrame(dataframe.iloc[:,-1])
-        test_output = pd.merge(target_column, output, left_index=True, right_index=True)
-        ax = sns.jointplot(x=column, y=target, data=test_output, kind='reg', marker="+", color="b")
-        ax.fig.suptitle("Scatter plot of " + str(column) + "vs. " + target + " after imputation")
-        plt.figure()
+        if target != None:
+        
+            target_column = pd.DataFrame(dataframe.iloc[:,-1])
+            test_output = pd.merge(target_column, output, left_index=True, right_index=True)
+            ax = sns.jointplot(x=column, y=target, data=test_output, kind='reg', marker="+", color="b")
+            ax.fig.suptitle("Scatter plot of " + str(column) + "vs. " + target + " after imputation")
+            plt.figure()
 
 
     return output
