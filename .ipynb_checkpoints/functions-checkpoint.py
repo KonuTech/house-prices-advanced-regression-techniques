@@ -307,7 +307,7 @@ def choose_imputer_and_visualise_categories(dataframe, variables, target, impute
             
     return output
 
-def add_deviation_features(dataframe):
+def add_deviation_features(dataframe, variables_floats, variables_objects):
     
     """
     feature numeric
@@ -316,8 +316,10 @@ def add_deviation_features(dataframe):
     
     data = []
 
-    categories = pd.DataFrame(dataframe.select_dtypes(include=['object'])).columns
-    features = pd.DataFrame(dataframe.select_dtypes(include=['float64'])).columns
+    #categories = pd.DataFrame(dataframe.select_dtypes(include=['object'])).columns
+    categories = variables_objects
+    #features = pd.DataFrame(dataframe.select_dtypes(include=['float64'])).columns
+    features = variables_floats
     
     for category in categories:
         for feature in features:
