@@ -25,7 +25,7 @@ from scipy.stats import norm
 import warnings
 from IPython.display import Image
 # from patsy import PatsyModel, PatsyTransformer
-
+import itertools
 
 warnings.filterwarnings('ignore')
 sns.set()
