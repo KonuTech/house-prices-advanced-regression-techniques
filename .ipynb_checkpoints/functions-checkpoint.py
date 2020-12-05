@@ -19,6 +19,7 @@ import seaborn as sns
 from scipy import stats
 from scipy.stats import norm
 import warnings
+from IPython.display import Image
 
 warnings.filterwarnings('ignore')
 sns.set()
