@@ -306,3 +306,31 @@ def choose_imputer_and_visualise_categories(dataframe, variables, target, impute
         fig = plt.figure()
             
     return output
+
+def add_deviation_features(dataframe):
+    
+    """
+    feature numeric
+    category object
+    """
+    
+    data = []
+
+    categories = pd.DataFrame(dataframe.select_dtypes(include=['object'])).columns
+    features = pd.DataFrame(dataframe.select_dtypes(include=['float64'])).columns
+    
+    for category in categories:
+        for feature in features:
+            category_feature = str(category) + "_DEVIATION_" + str(feature)
+
+            category_gb = dataframe.groupby(category)[feature]
+            category_mean = category_gb.transform(lambda x: x.mean())
+            category_std = category_gb.transform(lambda x: x.std())
+            
+            deviation_feature = ((dataframe[feature] - category_mean) / category_std).rename(category_feature)
+            data.append(deviation_feature)
+    
+    output = pd.DataFrame(data).T
+    dataframe = pd.concat([dataframe, output], axis=1)
+    
+    return dataframe
