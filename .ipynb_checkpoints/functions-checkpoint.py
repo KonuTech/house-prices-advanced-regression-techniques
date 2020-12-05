@@ -9,7 +9,7 @@
 from sklearn.datasets import load_boston, load_iris, load_diabetes, load_digits
 from sklearn.experimental import enable_iterative_imputer
 from sklearn.impute import SimpleImputer, IterativeImputer, KNNImputer
-from sklearn.preprocessing import PolynomialFeatures
+from sklearn.preprocessing import PolynomialFeatures, RobustScaler
 
 import os
 import pandas as pd
