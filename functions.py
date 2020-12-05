@@ -3,6 +3,8 @@
 # https://scikit-learn.org/stable/auto_examples/impute/plot_missing_values.html#impute-the-missing-data-and-score
 # https://scikit-learn.org/stable/modules/impute.html
 
+# https://scikit-lego.readthedocs.io/en/latest/index.html
+
 from sklearn.datasets import load_boston, load_iris, load_diabetes, load_digits
 from sklearn.experimental import enable_iterative_imputer
 from sklearn.impute import SimpleImputer, IterativeImputer, KNNImputer
@@ -20,6 +22,7 @@ from scipy import stats
 from scipy.stats import norm
 import warnings
 from IPython.display import Image
+from patsylearn import PatsyModel, PatsyTransformer
 
 warnings.filterwarnings('ignore')
 sns.set()
