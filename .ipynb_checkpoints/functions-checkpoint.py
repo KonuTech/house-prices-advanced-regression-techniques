@@ -1,4 +1,5 @@
 # https://www.kaggle.com/c/house-prices-advanced-regression-techniques/data
+# https://www.kaggle.com/fk0728/feature-engineering-with-sklearn-pipelines
 
 # https://scikit-learn.org/stable/auto_examples/impute/plot_missing_values.html#impute-the-missing-data-and-score
 # https://scikit-learn.org/stable/modules/impute.html
@@ -9,7 +10,7 @@
 from sklearn.datasets import load_boston, load_iris, load_diabetes, load_digits
 from sklearn.experimental import enable_iterative_imputer
 from sklearn.impute import SimpleImputer, IterativeImputer, KNNImputer
-from sklearn.preprocessing import PolynomialFeatures, RobustScaler
+from sklearn.preprocessing import PolynomialFeatures, RobustScaler, StandardScaler
 
 import os
 import pandas as pd
