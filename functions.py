@@ -5,6 +5,9 @@
 # https://scikit-learn.org/stable/modules/impute.html
 # https://scikit-learn.org/stable/modules/classes.html#module-sklearn.preprocessing
 
+#https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.VarianceThreshold.html
+#https://scikit-learn.org/stable/modules/feature_selection.html#variance-threshold
+
 # https://scikit-lego.readthedocs.io/en/latest/index.html
 
 from sklearn.datasets import load_boston, load_iris, load_diabetes, load_digits
