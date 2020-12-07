@@ -34,6 +34,7 @@ import itertools
 warnings.filterwarnings('ignore')
 sns.set()
 pd.options.display.max_columns = None
+pd.set_option('display.float_format', lambda x: '%.3f' % x)
 
 def get_dataset(dictionary):
     
