@@ -15,6 +15,11 @@ from sklearn.datasets import load_boston, load_iris, load_diabetes, load_digits
 from sklearn.experimental import enable_iterative_imputer
 from sklearn.impute import SimpleImputer, IterativeImputer, KNNImputer
 from sklearn.preprocessing import PolynomialFeatures, RobustScaler, StandardScaler
+from sklearn.model_selection import GridSearchCV
+from sklearn.linear_model import Ridge, LinearRegression, Lasso
+from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
+from sklearn.feature_selection import VarianceThreshold, SelectKBest, f_regression, SelectFromModel
+from sklearn.tree import ExtraTreeRegressor
 
 import os
 import pandas as pd
@@ -26,11 +31,13 @@ from zipfile import ZipFile
 import matplotlib.pyplot as plt
 import seaborn as sns
 from scipy import stats
-from scipy.stats import norm
+from scipy.stats import norm, normaltest, kstest
+# from scipy.stats import normaltest
 import warnings
 from IPython.display import Image
 # from patsy import PatsyModel, PatsyTransformer
 import itertools
+
 
 warnings.filterwarnings('ignore')
 sns.set()
